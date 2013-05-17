@@ -34,7 +34,6 @@ if Meteor.isClient
           if err
             console.log err
           else
-            window.info = fileInfo
             arrays = jQuery.csv.toArrays(fileInfo.contents)
             headers = arrays[0]
             for row in arrays[1..]
