@@ -22,6 +22,9 @@ if Meteor.isClient
 
   Template.fileUpload.events
     "submit form" : (e, tmpl)->
+      #remove everything
+      CardData.find().forEach (item) ->
+        CardData.remove item._id
       CardData.remove() #first clear everything out
       fileInput = tmpl.find('input[type=file]')
       fileList = fileInput.files
@@ -39,4 +42,3 @@ if Meteor.isClient
               for value,i in row
                 cardData[headers[i]] = value
               CardData.insert(cardData)
-            console.log info
