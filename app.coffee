@@ -1,3 +1,5 @@
+@CardData = new Meteor.Collection "cardData"
+
 if Meteor.isClient
   TextFileReader =
     read: (file, callback) ->
@@ -7,10 +9,10 @@ if Meteor.isClient
         name: file.name
         type: file.type
         size: file.size
-        file: null
+        contents: null
 
       reader.onload = ->
-        fileInfo.file = reader.result
+        fileInfo.contents = reader.result
         callback(null, fileInfo)
 
       reader.onerror = ->
@@ -20,6 +22,7 @@ if Meteor.isClient
 
   Template.fileUpload.events
     "submit form" : (e, tmpl)->
+      CardData.remove() #first clear everything out
       fileInput = tmpl.find('input[type=file]')
       fileList = fileInput.files
       e.preventDefault()
@@ -28,5 +31,12 @@ if Meteor.isClient
           if err
             console.log err
           else
-            console.log fileInfo
-          
+            window.info = fileInfo
+            arrays = jQuery.csv.toArrays(fileInfo.contents)
+            headers = arrays[0]
+            for row in arrays[1..]
+              cardData = {}
+              for value,i in row
+                cardData[headers[i]] = value
+              CardData.insert(cardData)
+            console.log info
