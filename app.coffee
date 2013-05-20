@@ -20,8 +20,21 @@ if Meteor.isClient
 
       reader.readAsText(file)
 
+  Template.fileUpload.cards = ->
+    CardData.find()
+
+  Template.selectBox.cards = ->
+    CardData.find()
+
+  Template.cardSelection.events
+    "submit form#cruncher" : (e, tmpl)->
+      e.preventDefault()
+      handles = _.map $("select"), (item)->
+        item.value
+      crunchHand handles
+      
   Template.fileUpload.events
-    "submit form" : (e, tmpl)->
+    "submit form#uploader" : (e, tmpl)->
       #remove everything
       CardData.find().forEach (item) ->
         CardData.remove item._id
@@ -41,3 +54,9 @@ if Meteor.isClient
               for value,i in row
                 cardData[headers[i]] = value
               CardData.insert(cardData)
+
+  Template.output.mean = ->
+    Session.get "mean"
+
+  Template.output.stdDev = ->
+    Session.get "stdDev"

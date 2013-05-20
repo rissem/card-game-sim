@@ -1,18 +1,61 @@
 <head>
-  <title>html5-file-api</title>
+  <title>Card Cruncher</title>
 </head>
 
 <body>
-  {{> fileUpload}}
+  <div style="background-color:#eee; padding: 5px;">
+    <h1>Card Data Upload</h1>
+    <h3>Export CSVs then upload them here.  Caution: any previous data
+      will be destroyed on upload.</h3>
+    {{> fileUpload}}
+  </div>
+  {{> cardSelection}}
+  {{> output}}
 </body>
 
-<template name="fileUpload">
-  <form>
-    <input type="file" name="files" multiple />
+<template name="cardSelection">
+  <div id="cardSelector">
+    <h2>Input</h2>
+    <form id='cruncher'>
+      {{> selectBox}}
+      {{> selectBox}}
+      {{> selectBox}}
+      {{> selectBox}}
+      {{> selectBox}}
+      <br />
+      <input type="submit" value="Crunch!" />
+    </form>
+  </div>
+</template>
 
+<template name="selectBox">
+  <select>
+  {{#each cards}}
+  <option value="{{handle}}">{{handle}}</option>
+  {{/each}}
+  </select>
+</template>
+
+<template name="fileUpload">
+  <form id='uploader'>
+    <input type="file" name="files" multiple />
+    <br /><br />
     <div>
       <input type="submit" value="Upload"/>
     </div>
   </form>
+  <h2>Cards Available</h2>
+  <ul>
+  {{#each cards}}
+    <li>{{handle}}
+  {{/each}}
+  </ul>
 </template>
 
+<template name="output">
+  <div id="output">
+    <h2 style="inline">Output</h2> 
+    <h3 sytle="inline">Mean:</h3> <h4>{{mean}}</h4>
+    <h3 sytle="inline">StdDev:</h3> <h4>{{stdDev}}</h4>
+  </div>
+</template>

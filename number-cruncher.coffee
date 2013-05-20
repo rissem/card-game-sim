@@ -1,5 +1,3 @@
-@exampleCardHandles = ["blue", "green", "red", "red", "red"]
-
 @crunchHand = (cardHandles) ->
   cards = _.map cardHandles, (handle)->
     CardData.findOne {handle}
@@ -20,14 +18,15 @@
 @calculateMeanStdDev = (scores)->
   mean = 1.0*sum(scores) / scores.length
   console.log "MEAN", mean
+  Session.set "mean", mean
 
   squareSum = _.reduce scores, (memo, num) ->
     memo + Math.pow((num - mean),2)
   ,0
   console.log "SQUARE SUM", squareSum
   stdDev = Math.sqrt(1.0*squareSum/scores.length)
-  
   console.log "standard deviation", stdDev
+  Session.set "stdDev", stdDev
   
 @sum = (arr)->
   _.reduce arr, (memo, num)->
